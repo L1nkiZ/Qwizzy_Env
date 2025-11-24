@@ -1,0 +1,2 @@
+Notes perso : 
+<div style="font-size: 9px; margin-left: 1cm;"> <span>Guillaume GERARD, Tanaël CLAUDE, Nicolas WALTER</span></div> <div style="font-size: 9px; margin-left: auto; margin-right: 1cm;">%%ISO-DATE%%</div>
