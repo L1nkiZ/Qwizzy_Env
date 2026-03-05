@@ -1,0 +1,62 @@
+services:
+  # Service PHP - Backend Laravel
+  app:
+    build:
+      context: ../Qwizzy_API
+      dockerfile: Dockerfile
+    container_name: qwizzy_app
+    restart: unless-stopped
+    working_dir: /var/www
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../Qwizzy_API:/var/www
+      - /var/www/vendor
+      - /var/www/node_modules
+    networks:
+      - qwizzy_network
+    depends_on:
+      - db
+    command: sh -c "composer update --no-interaction --optimize-autoloader && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+  # Service PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: qwizzy_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qwizzy_api
+      POSTGRES_USER: qwizzy_user
+      POSTGRES_PASSWORD: qwizzy_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - qwizzy_network
+
+  # Service Frontend Nuxt
+  front:
+    build:
+      context: ../Qwizzy_Front
+      dockerfile: Dockerfile
+      target: development
+    container_name: qwizzy_front
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../Qwizzy_Front:/app
+      - /app/node_modules
+    networks:
+      - qwizzy_network
+    depends_on:
+      - app
+
+networks:
+  qwizzy_network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
