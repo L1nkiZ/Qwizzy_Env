@@ -17,7 +17,7 @@ services:
       - qwizzy_network
     depends_on:
       - db
-    command: sh -c "composer update --no-interaction --optimize-autoloader && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+    command: sh -c "composer install --no-interaction --optimize-autoloader && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
 
   # Service PostgreSQL
   db:
